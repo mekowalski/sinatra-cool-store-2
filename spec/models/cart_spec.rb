@@ -15,6 +15,27 @@ describe Cart do
     expect(@cart.status). to eq('submitted')
   end
 
+  describe 'class methods'do
+
+    describe 'total' do
+      let(:cart) {Cart.create}
+      let(:items) {Item.create(name: 'Blackberry', price: 400, inventory: 50)}
+      let(:items) {Item.create(name: 'French Press', price: 150, inventory: 25)}
+
+      it 'returns 0 if there are no items in the cart' do
+        expect(cart.total). to eq(0)
+      end
+
+      it 'returns the total price of items in the cart' do
+        cart.items << item
+        cart.items << item2
+
+        expect(cart.total).to eq(550)
+      end
+    end
+
+  end
+
   describe 'associations' do
     it 'belongs to a user' do
       @cart = Cart.create
@@ -23,6 +44,16 @@ describe Cart do
       user.carts << @cart
 
       expect(@cart.user).to eq(user)
+    end
+
+    it 'has many items' do
+      item1 = Item.create(name: 'Blackberry', price: 400, inventory: 50)
+      item2 = Item.create(name: 'French Press', price: 150, inventory: 25)
+
+      @cart.items << item1
+      @cart.items << item2
+
+      expect(@cart.items.size).to eq(2)
     end
   end
 end
